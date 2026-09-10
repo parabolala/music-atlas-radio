@@ -1,0 +1,13 @@
+projects:
+  - name: music-atlas-radio
+    environments:
+      - name: Production
+        services:
+          - type: web
+            name: music-atlas-radio
+            runtime: static
+            repo: https://github.com/parabolala/music-atlas-radio
+            branch: main
+            autoDeploy: true
+            buildCommand: echo "Static mirror ready"
+            staticPublishPath: .

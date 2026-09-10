@@ -1,0 +1,114 @@
+@font-face {
+  font-family: "Bebas Neue";
+  src: url("fonts/bebas-neue-400.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Space Mono";
+  src: url("fonts/space-mono-400.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("fonts/poppins-300.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("fonts/poppins-500.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "itc-avant-garde-gothic-pro";
+  src: url("fonts/poppins-300.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "itc-avant-garde-gothic-pro";
+  src: url("fonts/poppins-500.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html.mirror-js .preFade {
+  transition-property: opacity, transform;
+  will-change: opacity;
+}
+
+html.mirror-js .preFade:not(.fadeIn) {
+  opacity: 0;
+}
+
+html.mirror-js .preFade.fadeIn {
+  opacity: 1;
+}
+
+.sqsrte-scaled-text-container.loaded .sqsrte-scaled-text,
+.sqsrte-scaled-text-container.loaded .sqsrte-scaled-text > * {
+  position: relative;
+  white-space: nowrap !important;
+}
+
+.background-image-fx.mirror-image-fallback {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  visibility: visible !important;
+}
+
+.sqs-block-soundcloud .sqs-block-content {
+  position: relative;
+  height: 0;
+  padding-bottom: 67%;
+}
+
+.sqs-block-soundcloud iframe {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.marquee-block .sqs-block-content,
+.Marquee-display,
+.Marquee-track,
+.Marquee-svg {
+  height: 22px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  html.mirror-js .preFade,
+  html.mirror-js .preFade:not(.fadeIn) {
+    opacity: 1;
+    transition: none !important;
+  }
+}
