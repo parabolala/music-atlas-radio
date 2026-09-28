@@ -1317,6 +1317,41 @@
       "content_type": "text/css",
       "local": "/_mirror/static1.squarespace.com/static/versioned-site-css/670bfcb5cb80d44bdea82155/62/5c5a519771c10ba3470d8101/670bfcb5cb80d44bdea82176/1820/site__q_c5d31a7d968b.css"
     },
+    "https://static1.squarespace.com/static/vta/5c5a519771c10ba3470d8101/scripts/1065.22e7078701a8e80c33a3.js": {
+      "bytes": 2180,
+      "content_type": "application/javascript",
+      "local": "/_mirror/static1.squarespace.com/static/vta/5c5a519771c10ba3470d8101/scripts/1065.22e7078701a8e80c33a3.js"
+    },
+    "https://static1.squarespace.com/static/vta/5c5a519771c10ba3470d8101/scripts/1546.d223cfae01bfb8507fd8.js": {
+      "bytes": 7065,
+      "content_type": "application/javascript",
+      "local": "/_mirror/static1.squarespace.com/static/vta/5c5a519771c10ba3470d8101/scripts/1546.d223cfae01bfb8507fd8.js"
+    },
+    "https://static1.squarespace.com/static/vta/5c5a519771c10ba3470d8101/scripts/3591.037c2d57fae50914946e.js": {
+      "bytes": 7893,
+      "content_type": "application/javascript",
+      "local": "/_mirror/static1.squarespace.com/static/vta/5c5a519771c10ba3470d8101/scripts/3591.037c2d57fae50914946e.js"
+    },
+    "https://static1.squarespace.com/static/vta/5c5a519771c10ba3470d8101/scripts/4389.314c380c604b485aba4b.js": {
+      "bytes": 8284,
+      "content_type": "application/javascript",
+      "local": "/_mirror/static1.squarespace.com/static/vta/5c5a519771c10ba3470d8101/scripts/4389.314c380c604b485aba4b.js"
+    },
+    "https://static1.squarespace.com/static/vta/5c5a519771c10ba3470d8101/scripts/8706.f409b65d6cb08c30fef4.js": {
+      "bytes": 50680,
+      "content_type": "application/javascript",
+      "local": "/_mirror/static1.squarespace.com/static/vta/5c5a519771c10ba3470d8101/scripts/8706.f409b65d6cb08c30fef4.js"
+    },
+    "https://static1.squarespace.com/static/vta/5c5a519771c10ba3470d8101/scripts/background-image-fx-parallax.0117817ff80e10629134.js": {
+      "bytes": 7468,
+      "content_type": "application/javascript",
+      "local": "/_mirror/static1.squarespace.com/static/vta/5c5a519771c10ba3470d8101/scripts/background-image-fx-parallax.0117817ff80e10629134.js"
+    },
+    "https://static1.squarespace.com/static/vta/5c5a519771c10ba3470d8101/scripts/floating-cart.333bd5aee1885e7af603.js": {
+      "bytes": 617,
+      "content_type": "application/javascript",
+      "local": "/_mirror/static1.squarespace.com/static/vta/5c5a519771c10ba3470d8101/scripts/floating-cart.333bd5aee1885e7af603.js"
+    },
     "https://static1.squarespace.com/static/vta/5c5a519771c10ba3470d8101/scripts/site-bundle.f8068e4a963a1f8acefb1034204b21c1.js": {
       "bytes": 128065,
       "content_type": "application/javascript",

@@ -20,3 +20,13 @@ python3 -m http.server 4175 --bind 127.0.0.1
 `mirror-manifest.json` records every mirrored URL and any failed downloads. Run `tools/mirror_site.py` to refresh the capture from the public page.
 
 The `reference/` directory contains the desktop and mobile captures used for visual matching; the previous hand-built local assets remain available under `assets/`.
+
+## Validation
+
+Run `python3 -m unittest discover -s tests -v` after changing the capture tooling.
+The checks cover encoded component configuration, local component assets, lazy
+background-effect dependencies, and CSP-compatible runtime startup.
+
+The capture preserves JSON string delimiters inside HTML attributes, copies the
+template chunks used by page controllers, and replaces YUI's global-object eval
+with `globalThis`. The existing no-network parent CSP remains in place.

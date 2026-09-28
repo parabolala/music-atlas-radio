@@ -59,7 +59,8 @@ ASSET_SUFFIXES = {
 ABSOLUTE_URL_RE = re.compile(
     r"(?:(?:https?:)?//)(?:assets\.squarespace\.com|definitions\.sqspcdn\.com|"
     r"images\.squarespace-cdn\.com|static1\.squarespace\.com)"
-    r"[^\s\"'<>\\),}\]]+",
+    # An HTML-encoded quote terminates a URL in a JSON data attribute.
+    r"(?:(?!&(?:quot|apos|#0*(?:34|39)|#x0*(?:22|27));)[^\s\"'<>\\),}\]])+",
     re.IGNORECASE,
 )
 CSS_URL_RE = re.compile(r"url\(\s*([\"']?)([^\"')]+)\1\s*\)", re.IGNORECASE)
@@ -115,7 +116,12 @@ def local_relative_path(url: str) -> Path:
 
 
 def local_public_url(url: str) -> str:
-    return "/" + local_relative_path(url).as_posix()
+    public_url = "/" + local_relative_path(url).as_posix()
+    # The mirrored YUI bundle is patched for CSP compatibility; invalidate the
+    # previously cached upstream-hashed copy after the patch is deployed.
+    if Path(urllib.parse.urlsplit(url).path).name.startswith("common-vendors-stable-"):
+        public_url += "?self-hosted=1"
+    return public_url
 
 
 def fetch(url: str) -> tuple[str, bytes, str]:
@@ -148,6 +154,29 @@ def discover_css(text: str, base: str) -> set[str]:
     return urls
 
 
+def discover_template_chunks(text: str, base: str, controllers: set[str]) -> set[str]:
+    """Include the lazy template chunks needed by this page's controllers."""
+    if not Path(urllib.parse.urlsplit(base).path).name.startswith("site-bundle."):
+        return set()
+    table = re.search(
+        r'\.u=\w+=>"scripts/"\+\(\{(.*?)\}\[\w+\]\|\|\w+\)\+"\."\+\{(.*?)\}\[\w+\]\+"\.js"',
+        text,
+    )
+    if not table:
+        raise ValueError("Unrecognized template chunk map; review the upstream runtime")
+    names = dict(re.findall(r'(\d+):"([^"]+)"', table[1]))
+    hashes = dict(re.findall(r'(\d+):"([^"]+)"', table[2]))
+    # The site bundle initializes the floating cart even on non-commerce pages.
+    required = {key for key, name in names.items() if name == "floating-cart"}
+    for controller in controllers:
+        for match in re.finditer(re.escape(controller) + r':async\(\)=>await (.*?)\.then', text):
+            required.update(re.findall(r'\.e\((\d+)\)', match[1]))
+    return {
+        urllib.parse.urljoin(base, f"{names.get(key, key)}.{hashes[key]}.js")
+        for key in required
+    }
+
+
 def rewrite_urls(text: str, base: str, downloaded: set[str], css: bool = False) -> str:
     def replace_absolute(match: re.Match[str]) -> str:
         url = normalize_url(match.group(0), base)
@@ -168,6 +197,16 @@ def rewrite_urls(text: str, base: str, downloaded: set[str], css: bool = False) 
 
         text = CSS_URL_RE.sub(replace_css, text)
 
+    # YUI only uses this expression to obtain the global object. Avoid eval
+    # so the mirrored functional runtime can start under the existing CSP.
+    text = text.replace('new Function("return this")()', 'globalThis')
+    text = text.replace('Function("return this")()', 'globalThis')
+    # The template runtime composes lazy chunk URLs from this directory.
+    text = re.sub(
+        r'("templateScriptsRootUrl":")https://(static1\.squarespace\.com/[^" ]+/scripts/)(")',
+        lambda match: match[1] + "/_mirror/" + match[2] + match[3],
+        text,
+    )
     return text
 
 
@@ -225,6 +264,11 @@ def main() -> None:
     source_html = source_bytes.decode("utf-8", errors="replace")
     source_html = scrub_html(source_html)
 
+    controllers = {
+        name
+        for value in re.findall(r'data-controller="([^"]+)"', source_html)
+        for name in value.split()
+    }
     pending = discover_absolute(source_html, source_url)
     downloaded: dict[str, dict[str, object]] = {}
     text_assets: dict[str, tuple[str, str]] = {}
@@ -268,6 +312,7 @@ def main() -> None:
                     text = payload.decode("utf-8", errors="replace")
                     text_assets[url] = (text, content_type)
                     discovered = discover_css(text, url) if extension == ".css" or content_type == "text/css" else discover_absolute(text, url)
+                    discovered.update(discover_template_chunks(text, url, controllers))
                     pending.update(discovered - downloaded.keys() - failed.keys())
                 else:
                     output.write_bytes(payload)
